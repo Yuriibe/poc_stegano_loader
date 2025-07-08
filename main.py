@@ -1,26 +1,24 @@
-from PIL import Image
+from stego_embed import *
 
-payload = "Hello"  # Payload
-binary = ''.join([format(ord(c), '08b') for c in payload])  # payload → Binary
+# Real payload
+payload = "Hello"
 
-img = Image.open("rickroll.png")
-if img.mode != "RGB":
-    img = img.convert("RGB")
+# Turn to bytes
+payload_bytes = string_to_bytes(payload)
 
-pixels = img.load()
-width, height = img.size
+#  Base64 encode the bytes
+encoded = encode_payload(payload_bytes)
 
-idx = 0
-for y in range(height):
-    for x in range(width):
-        if idx >= len(binary):
-            break
-        r, g, b = pixels[x, y]
-        r = (r & 0xFE) | int(binary[idx])  # LSB setzen
-        pixels[x, y] = (r, g, b)
-        idx += 1
-    if idx >= len(binary):
-        break
+# Convert Base64 string to bytes
+encoded_bytes = string_to_bytes(encoded)
 
-img.save("stego_output.png")
-print("Text embedded.")
+#  Bitstring for embedding
+bitstring = to_bitstring(encoded_bytes)
+
+#  Embed
+embed_payload_in_lsb("rickroll.png", bitstring, "stego_output.png")
+
+# Logs
+print(encoded)
+print(f"Encoded base64 payload: {encoded}")
+print(f"Byte length: {len(encoded_bytes)}")
