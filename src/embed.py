@@ -66,3 +66,5 @@ def embed_payload_in_lsb(image_path: str, bitstring: str, output_path: str) -> N
 
 def add_custom_header(payload: bytes) -> bytes:
     """Adds a custom header to the payload for identification."""
+    length = len(payload).to_bytes(4, byteorder='big')  # 4 bytes = max 4 GB
+    return b"STEG" + length + payload

